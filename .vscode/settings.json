@@ -1,3 +1,7 @@
 {
-  "solidity-va.hover": false
+  "solidity-va.hover": false,
+  "slither.solcPath": "",
+  "slither.hiddenDetectors": [
+    "array-by-reference"
+  ]
 }

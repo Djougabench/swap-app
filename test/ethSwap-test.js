@@ -51,10 +51,9 @@ describe("  Contract  ", () => {
   };
 
   describe("buyTokens()", async () => {
-    let result;
     before(async () => {
       //purchase token before each example
-      result = await this.deployedContractEth
+      await this.deployedContractEth
         .connect(this.investor)
         .buyTokens(overrides);
     });
@@ -64,36 +63,37 @@ describe("  Contract  ", () => {
       let investorBalance = await this.deployedContractWari.balanceOf(
         this.investor.address
       );
+
       expect(await investorBalance).to.equal(tokens("100"));
+    });
 
-      //check EthSwapBalance after purchasse
-      let ethSwapBalance;
-      ethSwapBalance = await this.deployedContractWari.balanceOf(
-        this.deployedContractEth.address
-      );
-      expect(await ethSwapBalance).to.equal(tokens("999900"));
+    //check EthSwapBalance after purchasse
+    let ethSwapBalance;
+    ethSwapBalance = await this.deployedContractWari.balanceOf(
+      this.deployedContractEth.address
+    );
+    expect(await ethSwapBalance).to.equal(tokens("999900"));
 
-      ethSwapBalance = await ethers.provider.getBalance(
-        this.deployedContractEth.address
-      );
+    ethSwapBalance = await ethers.provider.getBalance(
+      this.deployedContractEth.address
+    );
 
-      expect(ethSwapBalance).to.equal(ethers.utils.parseEther("1"));
+    expect(ethSwapBalance).to.equal(ethers.utils.parseEther("1"));
 
-      /* HERE  CREATE THE REVERT TEST FOR BUYING TOKENS*/
+    /* HERE  CREATE THE REVERT TEST FOR BUYING TOKENS*/
 
-      describe("TokensPurchased Events", async () => {
-        it("Should emit a TokensPurchased event", async () => {
-          await expect(
-            this.deployedContractEth.connect(this.investor).buyTokens(overrides)
-          )
-            .to.emit(this.deployedContractEth, "TokensPurchased")
-            .withArgs(
-              this.investor.address,
-              this.deployedContractWari.address,
-              tokens("100"),
-              BigInt("100")
-            );
-        });
+    describe("TokensPurchased Events", async () => {
+      it("Should emit a TokensPurchased event", async () => {
+        await expect(
+          this.deployedContractEth.connect(this.investor).buyTokens(overrides)
+        )
+          .to.emit(this.deployedContractEth, "TokensPurchased")
+          .withArgs(
+            this.investor.address,
+            this.deployedContractWari.address,
+            tokens("100"),
+            BigInt("100")
+          );
       });
     });
   });
@@ -104,40 +104,43 @@ describe("  Contract  ", () => {
       await this.deployedContractWari
         .connect(this.investor)
         .approve(this.deployedContractEth.address, tokens("100"));
+    });
 
+    it("Allows user to instantly sell tokens from ethSwap for a fixed price", async () => {
       //investor sell the tokens
       await this.deployedContractEth
         .connect(this.investor)
         .sellTokens(tokens("100"));
     });
-
-    it("Allows user to instantly sell tokens from ethSwap for a fixed price", async () => {
-      //check investor token balance after purchasse
+    it("check investor token balance after  selling tokens, it should equal 0 ", async () => {
+      //check investor token balance after  selling tokens
       let investorBalance = await this.deployedContractWari.balanceOf(
         this.investor.address
       );
       expect(await investorBalance).to.equal(tokens("0"));
-
-      //check EthSwapBalance after purchasse
+    });
+    it("check EthSwapBalance   after selling tokens", async () => {
+      //check EthSwapBalance   after selling tokens
       let ethSwapBalance;
       ethSwapBalance = await this.deployedContractWari.balanceOf(
         this.deployedContractEth.address
       );
       expect(await ethSwapBalance).to.equal(tokens("1000000"));
-
+    });
+    it("check EthSwapBalance of Ether  after selling tokens", async () => {
+      //check EthSwapBalance of Ether  after selling tokens
       ethSwapBalance = await ethers.provider.getBalance(
         this.deployedContractEth.address
       );
       expect(ethSwapBalance).to.equal(ethers.utils.parseEther("0"));
     });
-    let overrides = {
-      value: tokens("3"),
-    };
-    /*
-    describe("TokensSold Events", async () => {
+
+    /* describe("TokensSold Events", async () => {
       it("Should emit a TokensSold event", async () => {
         await expect(
-          this.deployedContractEth.connect(this.investor).sellTokens(overrides)
+          this.deployedContractEth
+            .connect(this.investor)
+            .sellTokens(tokens("100"))
         )
           .to.emit(this.deployedContractEth, "TokensSold")
           .withArgs(
@@ -147,7 +150,7 @@ describe("  Contract  ", () => {
             BigInt("100")
           );
       });
-    });
+    });*/
 
     ///FAILLURE TEST : investor can't sell more thoken than they have
     /*describe("Failure test ", async () => {
