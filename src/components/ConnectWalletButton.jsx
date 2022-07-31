@@ -1,15 +1,6 @@
 import React, { useState } from "react";
 
-import {
-  Flex,
-  Text,
-  Button,
-  chakra,
-  Spinner,
-  Center,
-  useToast,
-  Badge,
-} from "@chakra-ui/react";
+import { Button, Spinner, Center, useToast } from "@chakra-ui/react";
 import { ethers } from "ethers";
 import { hasMetamask } from "../utils/HasMetamask";
 import useEthersProvider from "../hooks/UseEthersProvider";
