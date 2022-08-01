@@ -65,39 +65,38 @@ describe("  Contract  ", () => {
       );
 
       expect(await investorBalance).to.equal(tokens("100"));
-    });
 
-    //check EthSwapBalance after purchasse
-    let ethSwapBalance;
-    ethSwapBalance = await this.deployedContractWari.balanceOf(
-      this.deployedContractEth.address
-    );
-    expect(await ethSwapBalance).to.equal(tokens("999900"));
+      //check EthSwapBalance after purchasse
 
-    ethSwapBalance = await ethers.provider.getBalance(
-      this.deployedContractEth.address
-    );
+      ethSwapBalance = await this.deployedContractWari.balanceOf(
+        this.deployedContractEth.address
+      );
+      expect(await ethSwapBalance).to.equal(tokens("999900"));
 
-    expect(ethSwapBalance).to.equal(ethers.utils.parseEther("1"));
+      ethSwapBalance = await ethers.provider.getBalance(
+        this.deployedContractEth.address
+      );
 
-    /* HERE  CREATE THE REVERT TEST FOR BUYING TOKENS*/
+      expect(ethSwapBalance).to.equal(ethers.utils.parseEther("1"));
 
-    describe("TokensPurchased Events", async () => {
-      it("Should emit a TokensPurchased event", async () => {
-        await expect(
-          this.deployedContractEth.connect(this.investor).buyTokens(overrides)
-        )
-          .to.emit(this.deployedContractEth, "TokensPurchased")
-          .withArgs(
-            this.investor.address,
-            this.deployedContractWari.address,
-            tokens("100"),
-            BigInt("100")
-          );
+      /* HERE  CREATE THE REVERT TEST FOR BUYING TOKENS*/
+
+      describe("TokensPurchased Events", async () => {
+        it("Should emit a TokensPurchased event", async () => {
+          await expect(
+            this.deployedContractEth.connect(this.investor).buyTokens(overrides)
+          )
+            .to.emit(this.deployedContractEth, "TokensPurchased")
+            .withArgs(
+              this.investor.address,
+              this.deployedContractWari.address,
+              tokens("100"),
+              BigInt("100")
+            );
+        });
       });
     });
   });
-
   describe("sellTokens()", async () => {
     before(async () => {
       //investor must approve tokens before the purchase
