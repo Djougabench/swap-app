@@ -50,7 +50,6 @@ function App() {
     let ethBalance = await provider.getBalance(account);
     let balanceEth = ethers.utils.formatEther(ethBalance);
     setBalanceEth(balanceEth);
-    console.log("balanceLd", balanceEth);
 
     //load ethSwap contract
     const ethSwapData = new ethers.Contract(
@@ -199,6 +198,7 @@ function App() {
                 <SellForm
                   getDatas={getDatas}
                   sellTokens={sellTokens}
+                  buyIsLoading={buyIsLoading}
                   balanceEth={balanceEth}
                   wariTokenBalance={wariTokenBalance}
                 />

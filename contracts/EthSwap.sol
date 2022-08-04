@@ -63,7 +63,8 @@ contract EthSwap {
 
         // Perform sale
         token.transferFrom(msg.sender, address(this), _amount);
-        payable(msg.sender).transfer(etherAmount);
+        (bool sentSuccess, ) = payable(msg.sender).call{value: etherAmount}("");
+        require(sentSuccess, "Failed to send Ether");
 
         // Emit an event
         emit TokensSold(msg.sender, address(token), _amount, rate);

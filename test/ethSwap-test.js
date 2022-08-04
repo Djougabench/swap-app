@@ -10,7 +10,6 @@ describe("  Contract  ", () => {
   before(async () => {
     [this.deployer, this.investor, ...this.addrs] = await ethers.getSigners();
   });
-  console.log(ethers.getSigners());
 
   describe("WariToken deployement", async () => {
     it("should deploy the WariToken smart contract sucessfully", async () => {
@@ -118,15 +117,14 @@ describe("  Contract  ", () => {
       );
       expect(await investorBalance).to.equal(tokens("0"));
     });
-    it("check EthSwapBalance   after selling tokens", async () => {
-      //check EthSwapBalance   after selling tokens
+    it("check EthSwapBalance for tokens Balance  after receiving Wari tokens it should equalto 1000000 ", async () => {
       let ethSwapBalance;
       ethSwapBalance = await this.deployedContractWari.balanceOf(
         this.deployedContractEth.address
       );
       expect(await ethSwapBalance).to.equal(tokens("1000000"));
     });
-    it("check EthSwapBalance of Ether  after selling tokens", async () => {
+    it("check EthSwapBalance for  Ether Balance  after receiving Wari tokens tokens it should equal to 0 ", async () => {
       //check EthSwapBalance of Ether  after selling tokens
       ethSwapBalance = await ethers.provider.getBalance(
         this.deployedContractEth.address
@@ -134,7 +132,7 @@ describe("  Contract  ", () => {
       expect(ethSwapBalance).to.equal(ethers.utils.parseEther("0"));
     });
 
-    /* describe("TokensSold Events", async () => {
+    /*  describe("TokensSold Events", async () => {
       it("Should emit a TokensSold event", async () => {
         await expect(
           this.deployedContractEth

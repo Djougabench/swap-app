@@ -15,12 +15,12 @@ import {
   NumberIncrementStepper,
   NumberDecrementStepper,
   VStack,
-  Flex,
 } from "@chakra-ui/react";
 
 function BuyForm(props) {
   const { account, provider } = useEthersProvider();
   const [isLoading, setIsloading] = useState(false);
+
   const [value, setValue] = useState("0");
 
   return (
@@ -93,7 +93,11 @@ function BuyForm(props) {
                 width="270px"
                 border="2px"
               >
-                swap
+                {props.buyIsLoading ? (
+                  <Text>... purchasing</Text>
+                ) : (
+                  <Text>Swap</Text>
+                )}
               </Button>
             </Center>
           ) : (
